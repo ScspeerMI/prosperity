@@ -1,0 +1,36 @@
+# Refresh the data every day and commit it if anything changed.
+# build.py refuses to write docs/data.json if a source fails or looks wrong,
+# so a bad day leaves the live page on its last good numbers.
+name: Refresh data
+
+on:
+  schedule:
+    - cron: "47 11 * * *"   # 11:47 UTC daily
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Build data
+        run: python build.py
+      - name: Commit if changed
+        run: |
+          if git diff --quiet docs/data.json; then
+            echo "No change."
+          else
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add docs/data.json
+            git commit -m "Refresh data"
+            git pull --rebase
+            git push
+          fi

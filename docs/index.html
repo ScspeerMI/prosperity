@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>The Prosperity Gap · Sean Speer</title>
+  <meta name="description" content="GDP per person in Canada and the United States, nationally and by province and state, updated from official statistics.">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&family=IBM+Plex+Sans:wght@400;500&display=swap">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="wrap">
+    <header class="sitebar">
+      <a class="name" href="/">Sean Speer</a>
+      <nav aria-label="Site"><a href="/">&larr; All work</a></nav>
+    </header>
+    <section class="mast">
+      <h1>The Prosperity Gap</h1>
+      <p class="dek">GDP per person in Canada and the United States.</p>
+    </section>
+  </div>
+
+  <main class="wrap">
+    <section class="headline" id="headline">
+      <p class="verdict" id="verdict"><span class="big" id="cents">Loading…</span> <span class="period" id="per-dollar"></span></p>
+      <p class="range" id="trend-line"></p>
+      <p class="secondary" id="gap-line"></p>
+      <p class="caveat" id="caveat" hidden>At purchasing-power parity<span id="estimate-note"></span> · <a href="#methods" id="methods-link">How this works</a></p>
+    </section>
+
+    <div id="details" hidden>
+      <section class="block">
+        <h2>Canada's GDP per person as a share of the US</h2>
+        <p class="caption" id="share-caption"></p>
+        <div class="legend" id="share-legend"></div>
+        <div id="share-chart" class="chart"></div>
+
+        <div class="scenario" id="scenario">
+          <h3>What would it take?</h3>
+          <p class="hint" id="trend-hint"></p>
+          <div class="sliders">
+            <label class="slider">
+              <span class="slider-label">Canada's growth a year</span>
+              <input type="range" id="g-ca" min="-1" max="5" step="0.1">
+              <output id="g-ca-out" for="g-ca"></output>
+            </label>
+            <label class="slider">
+              <span class="slider-label">US growth a year</span>
+              <input type="range" id="g-us" min="-1" max="5" step="0.1">
+              <output id="g-us-out" for="g-us"></output>
+            </label>
+            <label class="slider">
+              <span class="slider-label">Close the gap by</span>
+              <input type="range" id="target" min="2030" max="2060" step="1">
+              <output id="target-out" for="target"></output>
+            </label>
+          </div>
+          <button type="button" class="link-button" id="reset-scenario">Back to recent trends</button>
+          <ul class="scenario-results" aria-live="polite">
+            <li id="sc-proj"></li>
+            <li id="sc-need"></li>
+            <li id="sc-history"></li>
+          </ul>
+          <p class="caption" id="sc-caveat"></p>
+        </div>
+      </section>
+
+      <section class="block">
+        <div class="block-head">
+          <h2>Growth in GDP per person since <span id="base-year-label"></span></h2>
+          <label class="inline-select"><span class="visually-hidden">Starting year</span><select id="base-year"></select></label>
+        </div>
+        <div class="legend" id="growth-legend"></div>
+        <div id="growth-chart" class="chart"></div>
+      </section>
+
+      <section class="block" id="regions">
+        <div class="block-head">
+          <h2>If the provinces were states, <span id="region-year"></span></h2>
+        </div>
+        <p class="range" id="region-line"></p>
+        <div class="controls-row">
+          <div class="segmented" role="radiogroup" aria-label="Currency conversion">
+            <label><input type="radio" name="basis" value="ppp" checked><span>Purchasing power</span></label>
+            <label><input type="radio" name="basis" value="fx"><span>Exchange rate</span></label>
+          </div>
+          <label class="check"><input type="checkbox" id="show-all"> Territories and DC</label>
+        </div>
+        <div class="legend" id="region-legend"></div>
+        <div id="region-chart" class="chart"></div>
+      </section>
+    </div>
+  </main>
+
+  <section class="wrap methods" id="methods">
+    <details id="methods-details">
+      <summary>
+        <span class="summary-title">How this works</span>
+        <span class="summary-sub">Method, caveats, sources · <span id="built"></span></span>
+      </summary>
+      <div class="methods-grid">
+        <div>
+          <h3>The measure</h3>
+          <p>GDP per person is the total value of what an economy produces in a year, divided by its population. It is the most widely used summary of an economy's output per person and a common proxy for living standards, but it is not the same as income or wellbeing.</p>
+          <p>To compare countries, Canadian dollars are converted at <strong>purchasing-power parity</strong>: the exchange rate at which a dollar buys the same basket of goods and services in both countries. Market exchange rates swing with oil prices and interest rates, and would make the gap look larger or smaller from year to year for reasons that have little to do with what each economy produces.</p>
+          <p>The share chart shows two lines. <strong>At each year's prices</strong> compares the countries using that year's purchasing-power parity; it is the standard way to compare levels, and the headline uses it. <strong>At constant 2020 prices</strong> uses the OECD's inflation-adjusted series, which tracks real growth and is the better guide to the trend. The two diverge when price levels move: the rise in 2021–22 on the first line mostly reflects a revised international price comparison and higher commodity prices, not Canada catching up. The growth chart uses the same constant-price series.</p>
+          <h3>Provinces and states</h3>
+          <p>Provincial GDP and population come from Statistics Canada, and state figures from the US Bureau of Economic Analysis, for the latest year both have published (<span id="method-year"></span>). Provincial figures are converted with Canada's national purchasing-power parity (<span id="method-ppp"></span> Canadian dollars per US dollar) or, with the switch, the average market exchange rate (<span id="method-fx"></span>).</p>
+        </div>
+        <div>
+          <h3>What can move the numbers</h3>
+          <ul>
+            <li><strong>Price levels within each country.</strong> Living costs differ between provinces and between states, but the conversion uses one national rate for Canada and none for the US. Places with high costs, such as New York or Vancouver, look richer than they are in purchasing terms.</li>
+            <li><strong>Population growth.</strong> Rapid population growth can lower GDP per person even when the economy grows overall.</li>
+            <li><strong>Hours worked.</strong> GDP per person reflects both productivity and how many people work, and for how long.</li>
+            <li><strong>Commodity prices.</strong> Oil and mineral prices raise or lower the measured output of Alberta, Saskatchewan, Newfoundland and Labrador and the territories, and of states such as North Dakota and Wyoming. Part of that output is profit paid to owners outside the province, so it overstates local incomes.</li>
+            <li><strong>Commuting.</strong> GDP is counted where people work, population where they live. The District of Columbia and, to a lesser extent, Delaware look richer than their residents are.</li>
+            <li><strong>Small places.</strong> The territories and the District of Columbia are left out of the ranking by default. Their tiny populations and concentrated industries (mining; the federal government) make their figures unrepresentative.</li>
+            <li><strong>Close calls.</strong> Purchasing-power parities are estimates with margins of several percent, so rankings between places within a percent or two of each other are not meaningful. The page describes those as "about level".</li>
+            <li><strong>Estimates.</strong> The latest year is often a preliminary estimate<span id="estimate-method"></span> and will be revised.</li>
+            <li><strong>Revisions.</strong> National statistics agencies revise past years. The page updates automatically when they do.</li>
+          </ul>
+          <p class="caution">The underlying figures are official statistics. The shares, conversions and rankings are calculations made for this page.</p>
+        </div>
+      </div>
+      <h3>Sources</h3>
+      <ul id="sources" class="sources"></ul>
+    </details>
+  </section>
+
+  <footer class="wrap">
+    <span>A personal project by Sean Speer.</span>
+    <a href="/">seanspeer.com</a>
+  </footer>
+
+  <div id="tooltip" class="tooltip" role="status" hidden></div>
+  <script type="module" src="app.js"></script>
+</body>
+</html>
